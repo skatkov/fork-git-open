@@ -65,8 +65,18 @@ elif [ $# = 2 ]; then
   repo=$2
 fi
 
+# Detect the appropriate open command based on the operating system
+if command -v xdg-open >/dev/null 2>&1; then
+  open_cmd="xdg-open"
+elif command -v open >/dev/null 2>&1; then
+  open_cmd="open"
+else
+  echo "Error: No suitable open command found (tried xdg-open and open)"
+  exit 1
+fi
+
 if [ -n "${DEBUG:-}" ]; then
   echo $baseurl/$username/$repo
 else
-  open $baseurl/$username/$repo
+  $open_cmd $baseurl/$username/$repo
 fi
